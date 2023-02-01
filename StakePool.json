@@ -1,0 +1,1206 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_stakeFactory", "type": "address" },
+      { "internalType": "address", "name": "_stakingToken", "type": "address" },
+      { "internalType": "address", "name": "_owner", "type": "address" },
+      {
+        "internalType": "uint256",
+        "name": "_minStakingPeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_minStakeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxStakeAmount",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "time_period",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "boost_percentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IStakePool.BoostParams[]",
+        "name": "_boostOptions",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "creator",
+        "type": "address"
+      }
+    ],
+    "name": "onAddRewardCreator",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "onBurnBoostToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "onDrainToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "stakeModFeeToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "stakeModFeeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address payable",
+        "name": "stakeModFeeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "countryCode",
+        "type": "uint16"
+      }
+    ],
+    "name": "onInit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "rewardPoolAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "contractVersion",
+        "type": "uint256"
+      }
+    ],
+    "name": "onRewardPoolRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "stakingToken",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minStakingPeriod",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minStakeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "maxStakeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "onStakePoolCreate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "onTransferPoolOwnership",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "min",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "max",
+        "type": "uint256"
+      }
+    ],
+    "name": "onUpdateMinMaxStakeAmounts",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timeInSeconds",
+        "type": "uint256"
+      }
+    ],
+    "name": "onUpdateMinStakingPeriod",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shares_total",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "share_weight_total",
+        "type": "uint256"
+      }
+    ],
+    "name": "onUpdatePoolShareInfo",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "shares",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokens_staking",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "share_weight",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "unlock_date",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "boost_additional_time",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "time_boost_percentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "uncl_boost_percentage",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "subscriptions_length",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "accepted_stake_fee_token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "accepted_stake_fee_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "onUpdateUserInfo",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "onUserEnterPool",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      }
+    ],
+    "name": "onUserLeavePool",
+    "type": "event"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "BOOST_OPTIONS",
+    "outputs": [
+      { "internalType": "uint256", "name": "time_period", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "boost_percentage",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "CONTRACT_VERSION",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "COUNTRY_CODE",
+    "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "POOL_INFO",
+    "outputs": [
+      { "internalType": "address", "name": "owner", "type": "address" },
+      {
+        "internalType": "contract IERC20",
+        "name": "staking_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "min_staking_period",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "min_stake_amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_stake_amount",
+        "type": "uint256"
+      },
+      { "internalType": "bool", "name": "unlock_tokens", "type": "bool" },
+      { "internalType": "uint256", "name": "num_stakers", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "num_reward_pools",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "max_reward_subscriptions",
+        "type": "uint256"
+      },
+      { "internalType": "address", "name": "reward_creator", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "SHARE_INFO",
+    "outputs": [
+      { "internalType": "uint256", "name": "shares_total", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "share_weight_total",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "SPOOL_GENERATOR",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "STAKE_FACTORY",
+    "outputs": [
+      {
+        "internalType": "contract IStakeFactory",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "STAKE_MODIFICATION_FEE",
+    "outputs": [
+      { "internalType": "bool", "name": "allowed", "type": "bool" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" },
+      {
+        "internalType": "contract IERC20",
+        "name": "fee_token",
+        "type": "address"
+      },
+      {
+        "internalType": "address payable",
+        "name": "fee_address",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "STAKE_SETTINGS",
+    "outputs": [
+      {
+        "internalType": "contract IStakeSettings",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "UNCL_BOOST",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "UNCL_FEE_ADDRESS",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "UNCL_TOKEN_ADDRESS",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "UNCL_BOOST_MAX_PERCENTAGE",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "UNCL_BOOST_MAX_AMOUNT",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "USER_MAP",
+    "outputs": [
+      { "internalType": "address", "name": "user_address", "type": "address" },
+      { "internalType": "uint256", "name": "shares", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "tokens_staking",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "share_weight", "type": "uint256" },
+      { "internalType": "uint256", "name": "unlock_date", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "boost_additional_time",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "time_boost_percentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "uncl_boost_percentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "subscriptions_length",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "accepted_stake_fee_token",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accepted_stake_fee_amount",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "adminDrainToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minStakeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxStakeAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "adminSetMinMaxStakeAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_minStakingPeriod",
+        "type": "uint256"
+      }
+    ],
+    "name": "adminSetMinStakingPeriod",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_creator", "type": "address" }
+    ],
+    "name": "adminSetRewardCreator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" },
+      { "internalType": "address", "name": "_fee_token", "type": "address" },
+      {
+        "internalType": "address payable",
+        "name": "_fee_address",
+        "type": "address"
+      }
+    ],
+    "name": "adminSetStakeModificationFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bool", "name": "_unlockTokens", "type": "bool" }
+    ],
+    "name": "adminSetUnlockTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "boostWeightWithUNCL",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "canCreateRewardPool",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBoostOptions",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "time_period",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "boost_percentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IStakePool.BoostParams[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getContractVersion",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNumRewardPools",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNumStakers",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "getNumUserSubscriptions",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPoolInfo",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "owner", "type": "address" },
+          {
+            "internalType": "contract IERC20",
+            "name": "staking_token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "min_staking_period",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "min_stake_amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "max_stake_amount",
+            "type": "uint256"
+          },
+          { "internalType": "bool", "name": "unlock_tokens", "type": "bool" },
+          {
+            "internalType": "uint256",
+            "name": "num_stakers",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "num_reward_pools",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "max_reward_subscriptions",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "reward_creator",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct StakePool.PoolInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "shares_total",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "share_weight_total",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct StakePool.ShareInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "time_period",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "boost_percentage",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IStakePool.BoostParams[]",
+        "name": "",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "UNCL_FEE_ADDRESS",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "UNCL_TOKEN_ADDRESS",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "UNCL_BOOST_MAX_PERCENTAGE",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "UNCL_BOOST_MAX_AMOUNT",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct StakePool.UNCLBoostInfo",
+        "name": "",
+        "type": "tuple"
+      },
+      {
+        "components": [
+          { "internalType": "bool", "name": "allowed", "type": "bool" },
+          { "internalType": "uint256", "name": "amount", "type": "uint256" },
+          {
+            "internalType": "contract IERC20",
+            "name": "fee_token",
+            "type": "address"
+          },
+          {
+            "internalType": "address payable",
+            "name": "fee_address",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct StakePool.StakeModificationFee",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPoolOwner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPoolShareInfo",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_index", "type": "uint256" }
+    ],
+    "name": "getRewardPoolAtIndex",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_index", "type": "uint256" }
+    ],
+    "name": "getStakerAtIndex",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getStakingToken",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUNCLBoostInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "UNCL_FEE_ADDRESS",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "UNCL_TOKEN_ADDRESS",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "UNCL_BOOST_MAX_PERCENTAGE",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "UNCL_BOOST_MAX_AMOUNT",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct StakePool.UNCLBoostInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "getUserInfo",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user_address",
+            "type": "address"
+          },
+          { "internalType": "uint256", "name": "shares", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "tokens_staking",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "share_weight",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unlock_date",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "boost_additional_time",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "time_boost_percentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "uncl_boost_percentage",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "subscriptions_length",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "accepted_stake_fee_token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "accepted_stake_fee_amount",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct IStakePool.UserInfo",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "getUserShareWeight",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "uint256", "name": "_index", "type": "uint256" }
+    ],
+    "name": "getUserSubscriptionAtIndex",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_rewardPools",
+        "type": "address[]"
+      }
+    ],
+    "name": "harvestMultiple",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stakeSettings",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_stakeModFeeToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_stakeModFeeAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address payable",
+        "name": "_stakeModFeeAddress",
+        "type": "address"
+      },
+      { "internalType": "uint16", "name": "_countryCode", "type": "uint16" }
+    ],
+    "name": "init1",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_boostToken", "type": "address" },
+      {
+        "internalType": "address payable",
+        "name": "_boostFeeAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_boostMaxPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_boostMaxAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "overrideUNCLBoostInfo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_rewardPoolAddress",
+        "type": "address"
+      }
+    ],
+    "name": "registerRewardPool",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bool", "name": "_allow", "type": "bool" }],
+    "name": "setStakeModFeeState",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_numShares", "type": "uint256" }
+    ],
+    "name": "sharesToTokens",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_stakeOwner", "type": "address" },
+      { "internalType": "uint256", "name": "_stakeAmount", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "_acceptedMinStakingPeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_acceptedBoostTimePeriod",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_acceptedBoostPercentage",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_acceptedStakeModFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_acceptedStakeModFeeToken",
+        "type": "address"
+      }
+    ],
+    "name": "stakeTokens",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_rewardPools",
+        "type": "address[]"
+      }
+    ],
+    "name": "subscribe",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "subscribeCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_newOwner", "type": "address" }
+    ],
+    "name": "transferPoolOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address[]",
+        "name": "_rewardPools",
+        "type": "address[]"
+      }
+    ],
+    "name": "unsubscribe",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" }
+    ],
+    "name": "unsubscribeCallback",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_sharesToWithdraw",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawTokens",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]
